@@ -1,4 +1,6 @@
 package com.twl.apilocadora.service;
 
-public interface UsuarioService {
+import com.twl.apilocadora.model.Usuario;
+
+public interface UsuarioService extends CrudService<Usuario, Long> {
 }

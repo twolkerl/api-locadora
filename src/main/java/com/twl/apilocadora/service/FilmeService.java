@@ -1,4 +1,6 @@
 package com.twl.apilocadora.service;
 
-public interface FilmeService {
+import com.twl.apilocadora.model.Filme;
+
+public interface FilmeService extends CrudService<Filme, Long> {
 }
