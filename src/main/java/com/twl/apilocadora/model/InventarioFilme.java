@@ -29,11 +29,11 @@ public class InventarioFilme implements Serializable {
     @Column(name = "ID_USUARIO")
     private Long idUsuario;
 
-    @JoinColumn(name = "ID_FILME", referencedColumnName = "ID_FILME")
+    @JoinColumn(name = "ID_FILME", referencedColumnName = "ID_FILME", insertable = false, updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Filme filme;
 
-    @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
+    @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO", insertable = false, updatable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
 }
