@@ -1,9 +1,10 @@
 package com.twl.apilocadora.controller;
 
+import com.twl.apilocadora.model.Filme;
 import com.twl.apilocadora.service.FilmeService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -18,7 +19,23 @@ public class FilmeController {
     }
 
     @GetMapping
-    public Set findAll() {
-        return service.findAll();
+    public ResponseEntity findAll() {
+
+        Set<Filme> filmes = service.findAll();
+
+        return CollectionUtils.isEmpty(filmes)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(filmes);
+    }
+
+    @PostMapping
+    public ResponseEntity save(@RequestBody Filme filme) {
+
+        try {
+            return ResponseEntity.ok(service.save(filme));
+        } catch (Exception e) {
+            // TODO tratar diferentes exceptions
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
