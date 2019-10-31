@@ -16,4 +16,8 @@ public interface InventarioFilmeRepository extends JpaRepository<InventarioFilme
     List<InventarioFilme> findAllByIdFilme(Long idFilme);
 
     InventarioFilme findFirstByIdFilmeAndIdUsuarioIsNull(Long idFilme);
+
+    List<InventarioFilme> findAllByIdUsuario(Long idUsuario);
+
+    InventarioFilme findByIdUsuarioAndIdFilme(Long idUsuario, Long idFilme);
 }

@@ -44,7 +44,7 @@ public class InventarioFilmeController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/alugar")
     public ResponseEntity rent(@RequestBody LocacaoDto locacaoDto) {
         try {
             return ResponseEntity.ok(service.rent(locacaoDto));
@@ -53,8 +53,33 @@ public class InventarioFilmeController {
         }
     }
 
+    @PutMapping("/receber-todos")
+    public ResponseEntity receiveAll(@RequestParam Long idUsuario) {
+        try {
+
+            service.receiveAll(idUsuario);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
+    }
+
+    @PutMapping("/receber")
+    public ResponseEntity receive(@RequestParam Long idUsuario,
+                                  @RequestParam Long idFilme) {
+        try {
+
+            service.receive(idUsuario, idFilme);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
+    }
+
     @GetMapping("/qtd-filme")
-    public ResponseEntity countByFilme(@RequestParam("idFilme") Long idFilme) {
+    public ResponseEntity countByFilme(@RequestParam Long idFilme) {
         try {
             return ResponseEntity.ok(service.countByIdFilme(idFilme));
         } catch (Exception e) {

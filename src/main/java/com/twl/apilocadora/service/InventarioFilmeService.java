@@ -13,5 +13,9 @@ public interface InventarioFilmeService extends CrudService<InventarioFilme, Lon
 
     List<InventarioFilme> findAllByIdFilme(Long idFilme);
 
-    InventarioFilme rent(LocacaoDto locacaoDto);
+    List<InventarioFilme> rent(LocacaoDto locacaoDto);
+
+    void receiveAll(Long idUsuario);
+
+    void receive(Long idUsuario, Long idFilme);
 }
