@@ -1,5 +1,6 @@
 package com.twl.apilocadora.controller;
 
+import com.twl.apilocadora.dto.LocacaoDto;
 import com.twl.apilocadora.model.InventarioFilme;
 import com.twl.apilocadora.service.InventarioFilmeService;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,15 @@ public class InventarioFilmeController {
             return CollectionUtils.isEmpty(inventarioFilmeList)
                     ? ResponseEntity.noContent().build()
                     : ResponseEntity.ok(inventarioFilmeList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity rent(@RequestBody LocacaoDto locacaoDto) {
+        try {
+            return ResponseEntity.ok(service.rent(locacaoDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }

@@ -21,10 +21,7 @@ public class UsuarioController {
     public ResponseEntity save(@RequestBody Usuario usuario) {
         try {
 
-            Usuario savedUsuario = service.save(usuario);
-
-            // Retorna apenas o ID do usuário criado.
-            return ResponseEntity.ok(savedUsuario.getIdUsuario());
+            return ResponseEntity.ok(service.save(usuario));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

@@ -4,8 +4,9 @@ import com.twl.apilocadora.filter.FilmeFilter;
 import com.twl.apilocadora.model.Filme;
 import com.twl.apilocadora.repository.FilmeRepository;
 import com.twl.apilocadora.service.FilmeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.twl.apilocadora.util.MatcherUtils;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -24,7 +25,14 @@ public class FilmeServiceImpl extends CrudServiceImpl<Filme, Long> implements Fi
     }
 
     @Override
-    public Set<Filme> findByFilter(FilmeFilter filter) {
-        return new HashSet<>(getRepository().findAllByIdFilmeOrTituloLikeOrDiretorLike(filter.getIdFilme(), filter.getTitulo(), filter.getAutor()));
+    public Set<Filme> findBy(Long idFilme, String titulo, String diretor) {
+
+        Filme filme = Filme.builder()
+                .idFilme(idFilme)
+                .titulo(titulo)
+                .diretor(diretor)
+                .build();
+
+        return new HashSet<>(getRepository().findAll(Example.of(filme, MatcherUtils.matchAnyContainingIgnoreCase())));
     }
 }
