@@ -21,7 +21,11 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity save(@RequestBody Usuario usuario) {
         try {
-            return ResponseEntity.ok(service.save(usuario));
+
+            Usuario savedUsuario = service.save(usuario);
+
+            // Retorna apenas o ID do usuário criado.
+            return ResponseEntity.ok(savedUsuario.getIdUsuario());
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
