@@ -5,6 +5,7 @@ import com.twl.apilocadora.model.Usuario;
 import com.twl.apilocadora.repository.UsuarioRepository;
 import com.twl.apilocadora.service.UsuarioService;
 import com.twl.apilocadora.util.EncryptUtils;
+import com.twl.apilocadora.util.MatcherUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -33,13 +34,14 @@ public class UsuarioServiceImpl extends CrudServiceImpl<Usuario, Long> implement
     }
 
     @Override
-    public Set<Usuario> findByFilter(UsuarioFilter filter) {
+    public Set<Usuario> findBy(Long idUsuario, String nomeCompleto, String email) {
 
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(filter.getIdUsuario());
-        usuario.setNomeCompleto(filter.getNomeCompleto());
-        usuario.setEmail(filter.getEmail());
+        Usuario usuario = Usuario.builder()
+                .idUsuario(idUsuario)
+                .nomeCompleto(nomeCompleto)
+                .email(email)
+                .build();
 
-        return new HashSet<>(getRepository().findAll(Example.of(usuario)));
+        return new HashSet<>(getRepository().findAll(Example.of(usuario, MatcherUtils.matchAnyContainingIgnoreCase())));
     }
 }

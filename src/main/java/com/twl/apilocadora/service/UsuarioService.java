@@ -7,5 +7,5 @@ import java.util.Set;
 
 public interface UsuarioService extends CrudService<Usuario, Long> {
 
-    Set<Usuario> findByFilter(UsuarioFilter filter);
+    Set<Usuario> findBy(Long idUsuario, String nomeCompleto, String email);
 }
