@@ -1,5 +1,6 @@
 package com.twl.apilocadora.service.impl;
 
+import com.twl.apilocadora.dto.LoginDto;
 import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.InventarioFilme;
 import com.twl.apilocadora.model.Usuario;
@@ -14,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -49,6 +51,15 @@ public class UsuarioServiceImpl extends CrudServiceImpl<Usuario, Long> implement
                 .build();
 
         return new HashSet<>(getRepository().findAll(Example.of(usuario, MatcherUtils.matchAnyContainingIgnoreCase())));
+    }
+
+    @Override
+    public Boolean authenticate(LoginDto loginDto) {
+
+        Usuario usuario = getRepository().findByEmail(loginDto.getEmail());
+
+        return Objects.nonNull(usuario)
+                && loginDto.getSenha().equals(EncryptUtils.decryptPassword(usuario.getSenha()));
     }
 
     @Override
