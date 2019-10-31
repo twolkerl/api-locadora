@@ -29,7 +29,7 @@ public class FilmeController {
                 : ResponseEntity.ok(filmes);
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/filtro")
     public ResponseEntity findByFilter(@RequestParam(required = false) Long idFilme,
                                        @RequestParam(required = false) String titulo,
                                        @RequestParam(required = false) String diretor) {

@@ -34,7 +34,7 @@ public class UsuarioController {
         return service.findAll();
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/filtro")
     public ResponseEntity findByFilter(@RequestParam(required = false) Long idUsuario,
                             @RequestParam(required = false) String nomeCompleto,
                             @RequestParam(required = false) String email) {
