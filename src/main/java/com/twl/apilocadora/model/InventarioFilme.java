@@ -1,5 +1,6 @@
 package com.twl.apilocadora.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString(exclude = {"filme", "usuario"})
 @EqualsAndHashCode(exclude = {"filme", "usuario"})
+@JsonIgnoreProperties({"filme", "usuario"})
 @Entity
 @Table(name = "TA_INVENTARIO_FILME")
 public class InventarioFilme implements Serializable {
