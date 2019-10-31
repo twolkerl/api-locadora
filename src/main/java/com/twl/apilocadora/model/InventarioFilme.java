@@ -24,7 +24,7 @@ public class InventarioFilme implements Serializable {
     @Column(name = "ID_INVENTARIO_FILME")
     private Long idInventarioFilme;
 
-    @NotNull
+    @NotNull(message = "É necessário informar o campo idFilme!")
     @Column(name = "ID_FILME")
     private Long idFilme;
 

@@ -24,7 +24,7 @@ public class Filme implements Serializable {
     @Column(name = "ID_FILME")
     private Long idFilme;
 
-    @NotBlank
+    @NotBlank(message = "É necessário informar o campo titulo!")
     @Column(name = "TITULO")
     private String titulo;
 

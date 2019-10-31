@@ -1,6 +1,5 @@
 package com.twl.apilocadora.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,15 +25,15 @@ public class Usuario implements Serializable {
     @Column(name = "ID_USUARIO")
     private Long idUsuario;
 
-    @NotBlank
+    @NotBlank(message = "É necessário informar o campo email!")
     @Column(name = "EMAIL", unique = true)
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "É necessário informar o campo nomeCompleto!")
     @Column(name = "NOME_COMPLETO")
     private String nomeCompleto;
 
-    @NotBlank
+    @NotBlank(message = "É necessário informar o campo senha!")
     @Column(name = "SENHA")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
