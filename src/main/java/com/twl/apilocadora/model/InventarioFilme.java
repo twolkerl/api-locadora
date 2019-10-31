@@ -1,19 +1,41 @@
 package com.twl.apilocadora.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(exclude = {"filme", "usuario"})
+@EqualsAndHashCode(exclude = {"filme", "usuario"})
+@JsonIgnoreProperties({"filme", "usuario"})
 @Entity
-public class InventarioFilme {
+@Table(name = "TA_INVENTARIO_FILME")
+public class InventarioFilme implements Serializable {
+
+    private static final long serialVersionUID = -8589587885574602868L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private Integer idFilme;
-    private Integer idUsuario;
+    @Column(name = "ID_INVENTARIO_FILME")
+    private Long idInventarioFilme;
+
+    @NotNull(message = "É necessário informar o campo idFilme!")
+    @Column(name = "ID_FILME")
+    private Long idFilme;
+
+    @Column(name = "ID_USUARIO")
+    private Long idUsuario;
+
+    @JoinColumn(name = "ID_FILME", referencedColumnName = "ID_FILME", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Filme filme;
+
+    @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Usuario usuario;
 }
