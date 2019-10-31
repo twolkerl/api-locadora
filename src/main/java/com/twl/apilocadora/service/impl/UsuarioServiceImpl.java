@@ -1,23 +1,29 @@
 package com.twl.apilocadora.service.impl;
 
-import com.twl.apilocadora.filter.UsuarioFilter;
+import com.twl.apilocadora.exceptions.BusinessException;
+import com.twl.apilocadora.model.InventarioFilme;
 import com.twl.apilocadora.model.Usuario;
+import com.twl.apilocadora.repository.InventarioFilmeRepository;
 import com.twl.apilocadora.repository.UsuarioRepository;
 import com.twl.apilocadora.service.UsuarioService;
 import com.twl.apilocadora.util.EncryptUtils;
 import com.twl.apilocadora.util.MatcherUtils;
 import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
 public class UsuarioServiceImpl extends CrudServiceImpl<Usuario, Long> implements UsuarioService {
 
-    public UsuarioServiceImpl(UsuarioRepository repository) {
+    private final InventarioFilmeRepository inventarioFilmeRepository;
+
+    public UsuarioServiceImpl(UsuarioRepository repository, InventarioFilmeRepository inventarioFilmeRepository) {
         super(repository);
+        this.inventarioFilmeRepository = inventarioFilmeRepository;
     }
 
     @Override
@@ -43,5 +49,17 @@ public class UsuarioServiceImpl extends CrudServiceImpl<Usuario, Long> implement
                 .build();
 
         return new HashSet<>(getRepository().findAll(Example.of(usuario, MatcherUtils.matchAnyContainingIgnoreCase())));
+    }
+
+    @Override
+    public void deleteById(Long idUsuario) throws BusinessException {
+
+        List<InventarioFilme> inventarioFilmeList = inventarioFilmeRepository.findAllByIdUsuario(idUsuario);
+
+        if (CollectionUtils.isEmpty(inventarioFilmeList)) {
+            super.deleteById(idUsuario);
+        } else {
+            throw new BusinessException("O usuário não pode ser excluído pois está com um filme alugado!");
+        }
     }
 }

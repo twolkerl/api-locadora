@@ -1,5 +1,6 @@
 package com.twl.apilocadora.controller;
 
+import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.Usuario;
 import com.twl.apilocadora.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,8 @@ public class UsuarioController {
 
             return ResponseEntity.ok(service.save(usuario));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -44,5 +46,19 @@ public class UsuarioController {
         return CollectionUtils.isEmpty(usuarios)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.ok(usuarios);
+    }
+
+    @DeleteMapping
+    public ResponseEntity delete(@RequestParam Long idUsuario) {
+        try {
+            service.deleteById(idUsuario);
+
+            return ResponseEntity.ok().build();
+        } catch (BusinessException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

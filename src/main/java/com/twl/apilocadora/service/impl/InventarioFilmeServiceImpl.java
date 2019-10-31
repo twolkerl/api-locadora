@@ -1,8 +1,11 @@
 package com.twl.apilocadora.service.impl;
 
 import com.twl.apilocadora.dto.LocacaoDto;
+import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.InventarioFilme;
+import com.twl.apilocadora.model.Usuario;
 import com.twl.apilocadora.repository.InventarioFilmeRepository;
+import com.twl.apilocadora.repository.UsuarioRepository;
 import com.twl.apilocadora.service.InventarioFilmeService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -14,8 +17,11 @@ import java.util.Objects;
 @Service
 public class InventarioFilmeServiceImpl extends CrudServiceImpl<InventarioFilme, Long> implements InventarioFilmeService {
 
-    public InventarioFilmeServiceImpl(InventarioFilmeRepository repository) {
+    private final UsuarioRepository usuarioRepository;
+
+    public InventarioFilmeServiceImpl(InventarioFilmeRepository repository, UsuarioRepository usuarioRepository) {
         super(repository);
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
@@ -83,6 +89,23 @@ public class InventarioFilmeServiceImpl extends CrudServiceImpl<InventarioFilme,
             getRepository().save(inventarioFilme);
         } else {
             // TODO jogar exceção quando não encontrar locação
+        }
+    }
+
+    @Override
+    public void deleteById(Long idInventarioFilme) throws BusinessException {
+
+        InventarioFilme inventarioFilme = getRepository().findById(idInventarioFilme).orElse(null);
+
+        if (Objects.nonNull(inventarioFilme) && Objects.nonNull(inventarioFilme.getIdUsuario())) {
+
+            Usuario usuario = usuarioRepository.findById(inventarioFilme.getIdUsuario()).orElse(null);
+
+            if (Objects.isNull(usuario)) {
+                super.deleteById(idInventarioFilme);
+            } else {
+                throw new BusinessException("A cópia do filme não pode ser excluída pois está alugada!");
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.twl.apilocadora.service;
 
+import com.twl.apilocadora.exceptions.BusinessException;
+
 import java.util.Set;
 
 public interface CrudService<T, ID> {
@@ -12,5 +14,5 @@ public interface CrudService<T, ID> {
 
     void delete(T object);
 
-    void deleteById(ID id);
+    void deleteById(ID id) throws BusinessException;
 }

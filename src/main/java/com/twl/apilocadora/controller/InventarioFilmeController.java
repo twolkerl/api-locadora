@@ -1,6 +1,7 @@
 package com.twl.apilocadora.controller;
 
 import com.twl.apilocadora.dto.LocacaoDto;
+import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.InventarioFilme;
 import com.twl.apilocadora.service.InventarioFilmeService;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,8 @@ public class InventarioFilmeController {
                     ? ResponseEntity.noContent().build()
                     : ResponseEntity.ok(inventarioFilmeList);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -49,7 +51,8 @@ public class InventarioFilmeController {
         try {
             return ResponseEntity.ok(service.rent(locacaoDto));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -61,7 +64,8 @@ public class InventarioFilmeController {
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -74,7 +78,8 @@ public class InventarioFilmeController {
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -83,7 +88,8 @@ public class InventarioFilmeController {
         try {
             return ResponseEntity.ok(service.countByIdFilme(idFilme));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -92,7 +98,22 @@ public class InventarioFilmeController {
         try {
             return ResponseEntity.ok(service.countAvailableByIdFilme(idFilme));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity delete(@RequestParam Long idInventarioFilme) {
+        try {
+            service.deleteById(idInventarioFilme);
+
+            return ResponseEntity.ok().build();
+        } catch (BusinessException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

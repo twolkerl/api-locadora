@@ -1,5 +1,6 @@
 package com.twl.apilocadora.controller;
 
+import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.Filme;
 import com.twl.apilocadora.service.FilmeService;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,22 @@ public class FilmeController {
         try {
             return ResponseEntity.ok(service.save(filme));
         } catch (Exception e) {
-            // TODO tratar diferentes exceptions
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity delete(@RequestParam Long idFilme) {
+        try {
+            service.deleteById(idFilme);
+
+            return ResponseEntity.ok().build();
+        } catch (BusinessException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
