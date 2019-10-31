@@ -3,7 +3,6 @@ package com.twl.apilocadora.controller;
 import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.Filme;
 import com.twl.apilocadora.service.FilmeService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -44,26 +43,13 @@ public class FilmeController {
 
     @PostMapping
     public ResponseEntity save(@RequestBody Filme filme) {
-
-        try {
-            return ResponseEntity.ok(service.save(filme));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(service.save(filme));
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam Long idFilme) {
-        try {
-            service.deleteById(idFilme);
+    public ResponseEntity delete(@RequestParam Long idFilme) throws BusinessException {
 
-            return ResponseEntity.ok().build();
-        } catch (BusinessException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        service.deleteById(idFilme);
+        return ResponseEntity.ok().build();
     }
 }

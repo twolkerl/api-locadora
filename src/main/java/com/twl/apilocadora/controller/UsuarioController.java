@@ -3,7 +3,6 @@ package com.twl.apilocadora.controller;
 import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.Usuario;
 import com.twl.apilocadora.service.UsuarioService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +21,7 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity save(@RequestBody Usuario usuario) {
-        try {
-
-            return ResponseEntity.ok(service.save(usuario));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return ResponseEntity.ok(service.save(usuario));
     }
 
     @GetMapping
@@ -49,16 +42,9 @@ public class UsuarioController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam Long idUsuario) {
-        try {
-            service.deleteById(idUsuario);
+    public ResponseEntity delete(@RequestParam Long idUsuario) throws BusinessException {
 
-            return ResponseEntity.ok().build();
-        } catch (BusinessException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        service.deleteById(idUsuario);
+        return ResponseEntity.ok().build();
     }
 }
