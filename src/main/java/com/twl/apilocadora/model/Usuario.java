@@ -1,12 +1,20 @@
 package com.twl.apilocadora.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "TA_USUARIO")
 public class Usuario implements Serializable {
@@ -19,7 +27,7 @@ public class Usuario implements Serializable {
     private Long idUsuario;
 
     @NotBlank
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
     @NotBlank
@@ -28,5 +36,6 @@ public class Usuario implements Serializable {
 
     @NotBlank
     @Column(name = "SENHA")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 }

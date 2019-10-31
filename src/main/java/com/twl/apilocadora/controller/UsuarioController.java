@@ -2,11 +2,12 @@ package com.twl.apilocadora.controller;
 
 import com.twl.apilocadora.model.Usuario;
 import com.twl.apilocadora.service.UsuarioService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -22,12 +23,26 @@ public class UsuarioController {
     public ResponseEntity save(@RequestBody Usuario usuario) {
         try {
 
-            Usuario savedUsuario = service.save(usuario);
-
-            // Retorna apenas o ID do usuário criado.
-            return ResponseEntity.ok(savedUsuario.getIdUsuario());
+            return ResponseEntity.ok(service.save(usuario));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
+    }
+
+    @GetMapping
+    public Set findAll() {
+        return service.findAll();
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity findByFilter(@RequestParam(required = false) Long idUsuario,
+                            @RequestParam(required = false) String nomeCompleto,
+                            @RequestParam(required = false) String email) {
+
+        Set<Usuario> usuarios = service.findBy(idUsuario, nomeCompleto, email);
+
+        return CollectionUtils.isEmpty(usuarios)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(usuarios);
     }
 }

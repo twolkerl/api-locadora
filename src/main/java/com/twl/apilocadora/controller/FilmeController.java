@@ -1,8 +1,8 @@
 package com.twl.apilocadora.controller;
 
-import com.twl.apilocadora.filter.FilmeFilter;
 import com.twl.apilocadora.model.Filme;
 import com.twl.apilocadora.service.FilmeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +30,11 @@ public class FilmeController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity findByFilter(@RequestParam(value = "idFilme", required = false) Long idFilme,
-                                       @RequestParam(value = "titulo", required = false) String titulo,
-                                       @RequestParam(value = "diretor", required = false) String diretor) {
-        Set<Filme> filmes = service.findByFilter(new FilmeFilter(idFilme, titulo, diretor));
+    public ResponseEntity findByFilter(@RequestParam(required = false) Long idFilme,
+                                       @RequestParam(required = false) String titulo,
+                                       @RequestParam(required = false) String diretor) {
+
+        Set<Filme> filmes = service.findBy(idFilme, titulo, diretor);
 
         return CollectionUtils.isEmpty(filmes)
                 ? ResponseEntity.noContent().build()
@@ -47,7 +48,7 @@ public class FilmeController {
             return ResponseEntity.ok(service.save(filme));
         } catch (Exception e) {
             // TODO tratar diferentes exceptions
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 }
