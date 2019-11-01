@@ -1,7 +1,6 @@
 package com.twl.apilocadora.service.impl;
 
 import com.twl.apilocadora.dto.LoginDto;
-import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.InventarioFilme;
 import com.twl.apilocadora.model.Usuario;
 import com.twl.apilocadora.repository.InventarioFilmeRepository;
@@ -63,14 +62,14 @@ public class UsuarioServiceImpl extends CrudServiceImpl<Usuario, Long> implement
     }
 
     @Override
-    public void deleteById(Long idUsuario) throws BusinessException {
+    public void deleteById(Long idUsuario) {
 
         List<InventarioFilme> inventarioFilmeList = inventarioFilmeRepository.findAllByIdUsuario(idUsuario);
 
         if (CollectionUtils.isEmpty(inventarioFilmeList)) {
             super.deleteById(idUsuario);
         } else {
-            throw new BusinessException("O usuário não pode ser excluído pois está com um filme alugado!");
+            throw new RuntimeException("O usuário não pode ser excluído pois está com um filme alugado!");
         }
     }
 }

@@ -1,10 +1,8 @@
 package com.twl.apilocadora.service.impl;
 
-import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.service.CrudService;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,7 +39,7 @@ public abstract class CrudServiceImpl<T, ID> implements CrudService<T, ID> {
     }
 
     @Override
-    public void deleteById(ID id) throws BusinessException {
+    public void deleteById(ID id) {
         repository.deleteById(id);
     }
 }

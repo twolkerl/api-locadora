@@ -1,7 +1,6 @@
 package com.twl.apilocadora.handler;
 
 import com.twl.apilocadora.dto.ErroApi;
-import com.twl.apilocadora.exceptions.BusinessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,21 +19,21 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({BusinessException.class, EmptyResultDataAccessException.class, ConstraintViolationException.class})
+    @ExceptionHandler({RuntimeException.class, EmptyResultDataAccessException.class, ConstraintViolationException.class})
     public final ResponseEntity<ErroApi> handleException(Exception ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
 
         ex.printStackTrace();
 
-        if (ex instanceof BusinessException || ex instanceof EmptyResultDataAccessException) {
-            HttpStatus status = HttpStatus.BAD_REQUEST;
-
-            return handleExceptionInternal(ex, headers, status, request);
-        } else if (ex instanceof ConstraintViolationException) {
+        if (ex instanceof ConstraintViolationException) {
             HttpStatus status = HttpStatus.BAD_REQUEST;
             ConstraintViolationException cve = (ConstraintViolationException) ex;
 
             return handleConstraintViolationException(cve, headers, status, request);
+        } else if (ex instanceof RuntimeException) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+
+            return handleExceptionInternal(ex, headers, status, request);
         } else {
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
             return handleExceptionInternal(ex, headers, status, request);

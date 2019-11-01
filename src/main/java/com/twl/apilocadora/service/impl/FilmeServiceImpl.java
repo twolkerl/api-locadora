@@ -1,6 +1,5 @@
 package com.twl.apilocadora.service.impl;
 
-import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.Filme;
 import com.twl.apilocadora.model.InventarioFilme;
 import com.twl.apilocadora.repository.FilmeRepository;
@@ -43,14 +42,14 @@ public class FilmeServiceImpl extends CrudServiceImpl<Filme, Long> implements Fi
     }
 
     @Override
-    public void deleteById(Long idFilme) throws BusinessException {
+    public void deleteById(Long idFilme) {
 
         List<InventarioFilme> inventarioFilmeList = inventarioFilmeRepository.findAllByIdFilme(idFilme);
 
         if (CollectionUtils.isEmpty(inventarioFilmeList)) {
             super.deleteById(idFilme);
         } else {
-            throw new BusinessException("O filme não pode ser excluído pois ainda existem cópias em estoque!");
+            throw new RuntimeException("O filme não pode ser excluído pois ainda existem cópias em estoque!");
         }
     }
 }
