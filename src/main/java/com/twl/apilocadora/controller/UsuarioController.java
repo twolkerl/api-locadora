@@ -1,7 +1,6 @@
 package com.twl.apilocadora.controller;
 
 import com.twl.apilocadora.dto.LoginDto;
-import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.Usuario;
 import com.twl.apilocadora.service.UsuarioService;
 import org.springframework.http.HttpStatus;
@@ -44,7 +43,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam Long idUsuario) throws BusinessException {
+    public ResponseEntity delete(@RequestParam Long idUsuario) {
 
         service.deleteById(idUsuario);
         return ResponseEntity.ok().build();

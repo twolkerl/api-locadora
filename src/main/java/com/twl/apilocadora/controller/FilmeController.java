@@ -1,6 +1,5 @@
 package com.twl.apilocadora.controller;
 
-import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.Filme;
 import com.twl.apilocadora.service.FilmeService;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class FilmeController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam Long idFilme) throws BusinessException {
+    public ResponseEntity delete(@RequestParam Long idFilme) {
 
         service.deleteById(idFilme);
         return ResponseEntity.ok().build();

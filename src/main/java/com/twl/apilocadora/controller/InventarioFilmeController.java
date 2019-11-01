@@ -1,7 +1,6 @@
 package com.twl.apilocadora.controller;
 
 import com.twl.apilocadora.dto.LocacaoDto;
-import com.twl.apilocadora.exceptions.BusinessException;
 import com.twl.apilocadora.model.InventarioFilme;
 import com.twl.apilocadora.service.InventarioFilmeService;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +65,7 @@ public class InventarioFilmeController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestParam Long idInventarioFilme) throws BusinessException {
+    public ResponseEntity delete(@RequestParam Long idInventarioFilme) {
 
         service.deleteById(idInventarioFilme);
         return ResponseEntity.ok().build();
