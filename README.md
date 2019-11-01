@@ -8,6 +8,8 @@ um filme, devolução de um filme, pesquisa de filme pelo título e outras funç
 
 - MySQL
 
+Obs.: Script para criação do banco de dados encontra-se na pasta **SQL**
+
 ## Métodos disponíveis na API:
 
 ### Criar novo usuário
