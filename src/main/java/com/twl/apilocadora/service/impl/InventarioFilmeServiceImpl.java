@@ -2,9 +2,7 @@ package com.twl.apilocadora.service.impl;
 
 import com.twl.apilocadora.dto.LocacaoDto;
 import com.twl.apilocadora.model.InventarioFilme;
-import com.twl.apilocadora.model.Usuario;
 import com.twl.apilocadora.repository.InventarioFilmeRepository;
-import com.twl.apilocadora.repository.UsuarioRepository;
 import com.twl.apilocadora.service.InventarioFilmeService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -16,11 +14,9 @@ import java.util.Objects;
 @Service
 public class InventarioFilmeServiceImpl extends CrudServiceImpl<InventarioFilme, Long> implements InventarioFilmeService {
 
-    private final UsuarioRepository usuarioRepository;
 
-    public InventarioFilmeServiceImpl(InventarioFilmeRepository repository, UsuarioRepository usuarioRepository) {
+    public InventarioFilmeServiceImpl(InventarioFilmeRepository repository) {
         super(repository);
-        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
@@ -49,7 +45,13 @@ public class InventarioFilmeServiceImpl extends CrudServiceImpl<InventarioFilme,
         List<InventarioFilme> inventarioFilmeList = new ArrayList<>();
 
         locacaoDto.getIdsFilme()
-                .forEach(id -> inventarioFilmeList.add(getRepository().findFirstByIdFilmeAndIdUsuarioIsNull(id)));
+                .forEach(id -> {
+                    InventarioFilme inventarioFilme = getRepository().findFirstByIdFilmeAndIdUsuarioIsNull(id);
+
+                    if (Objects.nonNull(inventarioFilme)) {
+                        inventarioFilmeList.add(getRepository().findFirstByIdFilmeAndIdUsuarioIsNull(id));
+                    }
+                });
 
         if (!CollectionUtils.isEmpty(inventarioFilmeList)) {
 
@@ -94,15 +96,15 @@ public class InventarioFilmeServiceImpl extends CrudServiceImpl<InventarioFilme,
 
         InventarioFilme inventarioFilme = getRepository().findById(idInventarioFilme).orElse(null);
 
-        if (Objects.nonNull(inventarioFilme) && Objects.nonNull(inventarioFilme.getIdUsuario())) {
+        if (Objects.nonNull(inventarioFilme)) {
 
-            Usuario usuario = usuarioRepository.findById(inventarioFilme.getIdUsuario()).orElse(null);
-
-            if (Objects.isNull(usuario)) {
+            if (Objects.isNull(inventarioFilme.getIdUsuario())) {
                 super.deleteById(idInventarioFilme);
             } else {
                 throw new RuntimeException("A cópia do filme não pode ser excluída pois está alugada!");
             }
+        } else {
+            throw new RuntimeException("Não existe cópia de filmes para o ID informado!");
         }
     }
 }
